@@ -1,3 +1,5 @@
+import org.json.JSONObject;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -17,17 +19,18 @@ public class Main {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         String body = response.body();
 
-        System.out.println(body);
-
         // pegar só os dados que interessam (titulo, poster, classificacao)
-//        var parser = new JsonParser();
-//        List<Map<String, String>> listaDeFilmes = parser.parse(body);
-
-
-
+        JsonParser parser = new JsonParser();
+        List<Map<String, String>> listaDeFilmes = parser.parse(body);
+        System.out.println(listaDeFilmes.size());
 
         // exibir e manipular os dados
-
+        for (Map<String, String> filme : listaDeFilmes){
+            System.out.println(filme.get("title"));
+            System.out.println(filme.get("image"));
+            System.out.println(filme.get("imDbRating"));
+            System.out.println();
+        }
 
     }
 }
