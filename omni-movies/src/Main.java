@@ -1,11 +1,12 @@
+import org.json.JSONArray;
 import org.json.JSONObject;
+import vo.MoviesInfoVO;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -19,17 +20,31 @@ public class Main {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         String body = response.body();
 
-        // pegar só os dados que interessam (titulo, poster, classificacao)
-        JsonParser parser = new JsonParser();
-        List<Map<String, String>> listaDeFilmes = parser.parse(body);
-        System.out.println(listaDeFilmes.size());
 
-        // exibir e manipular os dados
-        for (Map<String, String> filme : listaDeFilmes){
-            System.out.println(filme.get("title"));
-            System.out.println(filme.get("image"));
-            System.out.println(filme.get("imDbRating"));
-            System.out.println();
+        System.out.println("Testando c meu método");
+
+        JSONObject obj = new JSONObject(body);
+        JSONArray array = obj.getJSONArray("items");
+        //List<Map<String, String>> filmes = new ArrayList<>();
+        ParsearJson parsearJson = new ParsearJson();
+        List<Map<String, String>> filmes = parsearJson.parsearMeuJson(array);
+
+
+//        for(int i = 0; i < array.length(); i++){
+//            Map<String, String> dadosTemp = new HashMap<>();
+//            String title = array.getJSONObject(i).getString("title");
+//            String image = array.getJSONObject(i).getString("image");
+//            String imDbRating = array.getJSONObject(i).getString("imDbRating");
+//            dadosTemp.put("title", title);
+//            dadosTemp.put("image", image);
+//            dadosTemp.put("imDbRating", imDbRating);
+//            filmes.add(dadosTemp);
+//        }
+
+        for(Map<String, String> movies : filmes){
+            System.out.println(movies.get("title"));
+            System.out.println(movies.get("image"));
+            System.out.println(movies.get("imDbRating"));
         }
 
     }
